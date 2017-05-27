@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+<style>
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+</style>
+
+
+<body>
+    <h1 id="name"></h1>
+<a href="/curtrip"><button type="submit" id="live">Live Trip</button></a>
+<a href="/newtrip"><button type="submit" id="new">Start New Trip</button></a>
+<a id="prev"><button type="submit">Previous Trips</button></a>
+</body>
+<script>
+var name;
+$.get("/getuser", function(data, status){
+        name = data;
+        document.getElementById("name").innerHTML="Hello "+name;
+        document.getElementById("prev").href="/prevtrips?user="+name;  
+    });
+$.get("/live", function(data, status){
+        if(data == 'no')
+            document.getElementById('live').style.display='none';
+        else
+            document.getElementById('new').style.display='none';
+
+    });
+</script>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "loginapp",
+  "version": "1.0.0",
+  "description": "Simple authentication system",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "abhishek jain",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "^1.4.3",
+    "express": "*",
+    "express-session": "^1.15.3",
+    "nodemon": "^1.11.0",
+    "redis": "^2.7.1",
+    "sync": "^0.2.5"
+  }
+}

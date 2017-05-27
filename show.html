@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 300px;
+        width: 50%;
+        margin: auto;
+       }
+       #end{
+        position: absolute;
+        top: 65px;
+        right: 30px;
+        width: 450px;
+        height: 100px;
+   
+       }
+    </style>
+    <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Your Trip</h3>
+    <h4 id="st"></h2>
+    <h4 id="end"></h4>
+    <div id="map"></div>
+    <script>
+        var qs = (function(a) {
+          if (a == "") return {};
+        var b = {};
+        for (var i = 0; i < a.length; ++i)
+        {
+          var p=a[i].split('=', 2);
+          if (p.length == 1)
+            b[p[0]] = "";
+          else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+        }
+        return b;
+        })(window.location.search.substr(1).split('&'));
+        
+      function initMap() {
+        var l1,l2;
+        var query = qs['e'];
+        $.get("/getCoordinates?e="+query, function(data, status){
+          console.log(qs);
+          l1=parseFloat(data.st.lat);
+          l2=parseFloat(data.st.log);
+          var uluru = {lat: l1, lng: l2 };
+          document.getElementById("st").innerHTML="Start <br>Latitude: "+data.st.lat +" Longitude: "+data.st.log+"<br> Time: "+data.st.time;
+          if(data.end.lat!='9999')
+          document.getElementById("end").innerHTML="End <br>Latitude: "+data.end.lat +" Longitude: "+data.end.log+"<br> Time: "+data.end.time;   
+          var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+          });
+          var marker = new google.maps.Marker({
+          position: uluru,
+          map: map,
+          label:'S'
+        });
+        });
+      }
+      function Showendform()
+      {
+        document.getElementById('endb').style.display='none';
+        document.getElementById('share').style.display='none';
+        document.getElementById('endform').style.display='block';
+      }
+      function validateform(){  
+      var lat=document.myform.id1.value;  
+      var log=document.myform.id2.value;  
+  
+      if (lat > 90.0 || lat < -90.0){  
+      document.getElementById("msg").innerHTML="Latitude must lie between -90 and +90";
+      return false;  
+      }else if(log > 180.0 || log < -180.0){  
+      document.getElementById("msg").innerHTML="Longitude must lie between -180 and +180";
+      return false;  
+    }  
+    
+}  
+  function shareall(){
+      document.getElementById('share1').value="192.168.43.160:3000/view?e="+qs['e'];
+      document.getElementById('share1').style.display='block';
+    }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyActGUV22N-O3OuzlUut_kU3LH1b71UqnA&callback=initMap">
+    </script>
+    <div id="endform">
+    <h1> Enter Latitude and Longitude </h1>
+    <form class="form-inline" name="myform" onsubmit="return validateform()" action="/endtrip", method="POST">
+    <div  class="form-group">
+        <input type="number" name="id1" class="form-control" placeholder="Latitude" required>
+        <input type="number" name="id2" class="form-control" placeholder="Longitude" required>
+        <input type="submit" class="btn btn-primary" value="End">
+        <p id="msg"></p>
+    </div>
+</form>
+    </div>
+    <button type="submit" class="btn btn-primary" id="endb" onclick="Showendform()">EndTrip</button>
+    <button type="submit" class="btn btn-primary" id="share" onclick="shareall()">Share</button>
+    <input type="text" id="share1" class="form-control">
+    <script>
+      var divOne = document.getElementById('endform');
+      divOne.style.display='none';
+      document.getElementById('share1').style.display='none';
+    </script>
+  </body>
+</html>

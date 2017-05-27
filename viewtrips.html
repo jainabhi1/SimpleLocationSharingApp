@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+<body>
+	<h1 id="ss"></h1>
+	<script type="text/javascript">
+	var qs = (function(a) {
+          if (a == "") return {};
+        var b = {};
+        for (var i = 0; i < a.length; ++i)
+        {
+          var p=a[i].split('=', 2);
+          if (p.length == 1)
+            b[p[0]] = "";
+          else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+        }
+        return b;
+        })(window.location.search.substr(1).split('&'));
+        console.log(qs);
+		console.log(qs['user']);
+        $.get("/viewtrips?user="+qs['user'], function(data, status){
+        document.getElementById('ss').innerHTML="Trips of "+qs['user'];
+       for(var key in data)
+       {
+       	var h = document.createElement("H1");
+       	var a = document.createElement("A");
+       	var t = document.createTextNode(key);
+       	h.appendChild(t);
+       	a.appendChild(h);
+       	a.href = "/view?e="+key;
+       	document.body.appendChild(a);
+       	var count = 0;
+       	for(var key1 in data[key])
+       	{
+       		var t;
+       		var h = document.createElement("H3");
+       		if(count%2==0)
+       		 t = document.createTextNode("Start");
+       		else
+       		 t = document.createTextNode("End");	
+       		h.appendChild(t);
+       		document.body.appendChild(h);
+       		{
+       			var h = document.createElement("H4");
+       			var t = document.createTextNode("Latitude: "+data[key][key1]['lat']);
+       			h.appendChild(t);
+       			document.body.appendChild(h);
+       			h = document.createElement("H4");
+       			t = document.createTextNode("Longitude: "+data[key][key1]['log']);
+       			h.appendChild(t);
+       			document.body.appendChild(h);
+       			h = document.createElement("H4");
+       			t = document.createTextNode("Longitude: "+data[key][key1]['time']);
+       			h.appendChild(t);
+       			document.body.appendChild(h);
+       		}
+       		count =count^1;
+       	}
+       }
+       
+    });
+</script>
+
+</body>
+
+</html>

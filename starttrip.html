@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    </head>
+<style>
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+</style>
+
+
+<body>
+    <h1 id="name"></h1>
+<h1> Enter Latitude and Longitude </h1>
+<form class="form-inline" name="myform" onsubmit="return validateform()" action="/startnewtrip" method="POST">
+    <div  class="form-group">
+        <input type="number" name="id1" class="form-control" placeholder="Latitude" required>
+        <input type="number" name="id2" class="form-control" placeholder="Longitude" required>
+        <input type="submit" class="btn btn-primary" value="Start">
+        <p id="msg"></p>
+    </div>
+</form>
+</body>
+<script>
+var name;
+$.get("/getuser", function(data, status){
+        name = data;
+        document.getElementById("name").innerHTML="Hello "+name+" start a new trip";  
+    });
+
+function validateform(){  
+var lat=document.myform.id1.value;  
+var log=document.myform.id2.value;  
+  
+    if (lat > 90.0 || lat < -90.0){  
+    document.getElementById("msg").innerHTML="Latitude must lie between -90 and +90";
+    return false;  
+    }else if(log > 180.0 || log < -180.0){  
+    document.getElementById("msg").innerHTML="Longitude must lie between -180 and +180";
+    return false;  
+    }  
+}  
+</script>
+</html>
